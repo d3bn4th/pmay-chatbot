@@ -1,0 +1,174 @@
+.main {
+    background-color: #1A1C24; /* Slightly darker background for the main content */
+    color: #E0E0E0; /* Lighter text color for better readability */
+    padding: 2rem 1rem 0rem 1rem;
+}
+.stChatInput {
+    position: fixed;
+    bottom: 0;
+    background-color: #24262E; /* Darker background for the input box */
+    padding: 1rem;
+    z-index: 100;
+    max-width: 700px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-sizing: border-box;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* Slightly increased gap for better spacing */
+    border-top: 1px solid #333; /* Subtle border at the top of the input area */
+    margin-bottom: 1rem; /* Add space below the input box */
+}
+.stChatInput input {
+    /* flex-grow: 1; */
+    font-size: 1.2rem !important;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid #444;
+    background-color: #2C2E3A;
+    color: white;
+    height: 3.2rem; /* Ensure consistent height */
+    /* vertical-align: middle; */
+    transition: border-color 0.2s ease-in-out;
+}
+.stChatInput input:focus {
+    border-color: #6A5ACD;
+    outline: none;
+}
+.stChatInput input::placeholder {
+    color: #999;
+    font-size: 1.2rem !important;
+    line-height: 1.2; /* Match line-height for placeholder */
+}
+/* Target the send button inside the chat input */
+.stChatInput button {
+    height: 3.2rem; /* Match input height */
+    width: 3.2rem; /* Make button square */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0; /* Remove padding for square button */
+    border-radius: 0.75rem; /* More rounded corners */
+    background-color: #6A5ACD; /* Modern accent color for the send button */
+    color: white;
+    border: none;
+    cursor: pointer;
+    /* vertical-align: middle; */
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out; /* Smooth transitions */
+}
+.stChatInput button:hover {
+    background-color: #7B68EE; /* Slightly lighter on hover */
+    transform: translateY(-1px); /* Slight lift on hover */
+}
+.chat-messages {
+    padding-top: 0rem;
+    margin-top: -0.5rem !important; /* Adjust spacing between title and messages */
+    padding-bottom: 7rem; /* Add padding to prevent chat input from overlapping messages */
+}
+.stChatMessage {
+    padding: 0.8rem 1rem; /* Adjusted padding */
+    border-radius: 0.75rem; /* More rounded corners */
+    margin-bottom: 0.8rem; /* Reduced margin between messages */
+    display: flex;
+    flex-direction: row;
+    gap: 0.75rem;
+    align-items: flex-start;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+/* Styling for user messages */
+div[data-testid="stChatMessage"][data-chat-role="user"] {
+    background-color: #3A3D4D; /* User message background */
+    color: #E0E0E0;
+    justify-content: flex-start; /* Align user messages to the left */
+}
+/* Styling for assistant messages */
+div[data-testid="stChatMessage"][data-chat-role="assistant"] {
+    background-color: #2F3140; /* Assistant message background */
+    color: #E0E0E0;
+    justify-content: flex-start; /* Align assistant messages to the left */
+}
+.stChatMessageContent {
+    padding: 0.5rem 0; /* Adjusted padding within content div */
+    border-radius: 0.5rem;
+}
+div[data-testid="stChatMessageContent"] {
+    font-size: 1.05rem; /* Slightly adjusted font size for overall readability */
+}
+div[data-testid="stChatMessageContent"] p {
+    margin: 0;
+    font-size: 1.05rem; /* Ensure paragraph text inside also gets the larger font size */
+}
+/* Reduce space below the title */
+h1 {
+    margin-bottom: 0.5rem; /* Slightly more space for the title */
+    color: #FFFFFF; /* Ensure title is bright white */
+}
+/* Target the container wrapping st.title to remove its bottom space more aggressively */
+div[data-testid="stMarkdownContainer"] {
+    margin-bottom: 0rem !important;
+    padding-bottom: 0rem !important;
+}
+/* Ensure the chat messages container has no top margin */
+.chat-messages {
+    margin-top: 0rem !important;
+    padding-top: 0rem; 
+}
+/* Style for the expander for source documents */
+div.stExpander {
+    border: 1px solid #444;
+    border-radius: 0.75rem;
+    background-color: #2F3140;
+    margin-top: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+div.stExpander > div[data-testid="stExpanderToggle"] {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    color: #E0E0E0;
+    font-weight: bold;
+}
+div.stExpanderContent {
+    padding: 1rem;
+    color: #B0B0B0;
+    font-size: 0.95rem;
+}
+
+div[data-testid="stForm"] {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 0.75rem; /* Ensure gap between input and button */
+}
+
+div[data-testid="stTextInput"] {
+    flex-grow: 1; /* Allow the text input to take available space */
+    min-width: 0; /* Allow shrinking */
+}
+
+div[data-testid="stFormSubmitButton"] {
+    flex-shrink: 0; /* Prevent the button from shrinking */
+}
+
+/* Force the chat input form to use flexbox and prevent overlap */
+div[data-testid="stChatInput"] form {
+    display: flex !important;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+div[data-testid="stChatInput"] input {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    box-sizing: border-box;
+}
+
+div[data-testid="stChatInput"] button {
+    flex: 0 0 3.2rem !important;
+    width: 3.2rem !important;
+    height: 3.2rem !important;
+    box-sizing: border-box;
+    margin-left: 0.5rem;
+}

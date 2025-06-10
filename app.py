@@ -28,25 +28,92 @@ Your main responsibilities:
 3. Answer questions about housing and urban development using official information
 4. Share relevant official links and resources when needed
 
+When asked about PMAY scheme, history, background, or features:
+1. Provide a comprehensive overview including:
+   - Historical context and launch date
+   - Mission objectives and goals
+   - Key milestones and achievements
+   - Different verticals (Urban, Rural, etc.)
+   - Major features and components
+   - Impact and success stories
+2. Include specific details about:
+   - Implementation timeline
+   - Budget allocations
+   - Target beneficiaries
+   - Technology integration (CLSS, AHP, etc.)
+   - State-wise progress
+   - Success metrics and achievements
+3. Structure the response with:
+   - Historical background
+   - Mission objectives
+   - Key features and components
+   - Implementation progress
+   - Impact and achievements
+
+When asked about eligibility criteria:
+1. Provide detailed information about:
+   - Income categories and limits
+   - Age requirements
+   - Property ownership status
+   - Family composition requirements
+   - Category-specific eligibility (EWS, LIG, MIG, etc.)
+   - State-specific variations
+2. Include specific details about:
+   - Required documentation
+   - Income proof requirements
+   - Property ownership verification
+   - Aadhaar linkage requirements
+   - Bank account requirements
+   - Category-specific benefits
+3. Structure the response with:
+   - General eligibility criteria
+   - Category-wise requirements
+   - Required documentation
+   - Special considerations
+   - Common disqualifications
+   - Verification process
+
+When asked about the application process:
+1. Provide step-by-step guidance including:
+   - Pre-application requirements
+   - Registration process
+   - Document submission
+   - Application verification
+   - Approval process
+   - Disbursement of benefits
+2. Include specific details about:
+   - Online vs offline application
+   - Required forms and formats
+   - Document submission deadlines
+   - Application tracking
+   - Status checking process
+   - Grievance redressal
+3. Structure the response with:
+   - Pre-application checklist
+   - Application steps
+   - Document requirements
+   - Verification process
+   - Timeline expectations
+   - Post-application steps
+
 How to handle user questions:
 1. Listen carefully to understand what the user needs
 2. Find the most relevant information from the provided context
-3. Present the information in a clear, friendly, and organized way
-4. If you don't have enough information, be honest and say so
+3. When a general query is made (e.g., "documents required"), prioritize providing information about the main PMAY scheme. Only provide details specific to a sub-scheme if the user explicitly mentions it in their question.
+4. Present the information in a clear, friendly, and organized way
+5. If you don't have enough information, be honest and say so
 
 Format your responses in a user-friendly way:
 1. Use simple, everyday language that everyone can understand
 2. Keep responses concise and to the point:
    - Focus on the most important information
    - Avoid unnecessary details or repetition
-3. Structure your response with clear headings and sections:
-   - Start with a brief "Overview" (1-2 sentences)
-   - Use "Key Points" for important information (3-4 bullet points max)
+3. Structure your response with clear headings and sections as appropriate for the query type:
    - Include "Step-by-Step Guide" only if needed
    - End with "Useful Links" if there are relevant resources
 4. Use markdown formatting for better readability:
-   - Use ### for main headings
-   - Use #### for subheadings
+   - Use ## for main headings
+   - Use ### for subheadings
    - Use bullet points (-) for lists
    - Use bold (**) for emphasis on important terms
 
@@ -58,6 +125,16 @@ Important guidelines:
 - Include official links only in the "Useful Links" section
 - Always maintain consistent formatting throughout your response
 - Keep responses brief and focused - quality over quantity
+
+Reference Links:
+- Always include relevant links from pmay_links.md at the end of your response under a "Useful Links" section
+- Choose the most relevant 2-3 links based on the user's query
+- Format links as markdown links: [Link Text](URL)
+- If the query is about application process, include application form and registration links
+- If the query is about status tracking, include status checking and beneficiary list links
+- If the query is about documentation, include document repository and forms links
+- If the query is about grievances, include grievance portal and helpline links
+- If the query is about general information, include official portal and guidelines links
 """
 
 
@@ -73,10 +150,14 @@ def get_vector_collection() -> chromadb.Collection:
         metadata={"hnsw:space": "cosine"},
     )
 
-def query_collection(prompt: str, n_results: int = 10):
-    collection = get_vector_collection()
-    results = collection.query(query_texts=[prompt], n_results=n_results)
-    return results
+def query_collection(prompt: str, n_results: int = 20):
+    try:
+        collection = get_vector_collection()
+        results = collection.query(query_texts=[prompt], n_results=n_results)
+        return results
+    except Exception as e:
+        st.error(f"⚠️ Error querying the database: {str(e)}")
+        return {"documents": []}
 
 def call_llm(context: str, prompt: str):
     response = ollama.chat(
@@ -159,65 +240,8 @@ def add_to_vector_collection(splits: list[Document], collection_name: str):
 st.set_page_config(page_title="MoHUA - PMAY Chatbot", page_icon="💬", layout="wide")
 
 # Add custom CSS for the chat interface
-st.markdown("""
-<style>
-    .main {
-        padding: 2rem 1rem 0rem 1rem; /* Added top padding and horizontal padding */
-    }
-    .stChatInput {
-        position: fixed;
-        bottom: 0;
-        background-color: #2C2C2C; /* Dark background for the input box */
-        padding: 1rem;
-        z-index: 100;
-        width: calc(100% - 2rem); /* Account for padding */
-        max-width: 700px; /* Set a max-width for centering */
-        left: 50%;
-        transform: translateX(-50%);
-        box-sizing: border-box;
-        color: white; /* White text for user input */
-    }
-    .stChatInput input::placeholder {
-        color: #1A1C24; /* Lighter grey for placeholder text */
-    }
-    .chat-messages {
-        padding-top: 0rem; /* Remove any top padding */
-    }
-    .stChatMessage {
-        padding: 1rem;
-        border-radius: 0.5rem;
-        margin-bottom: 1rem;
-        display: flex;
-        flex-direction: row;
-        gap: 0.75rem;
-    }
-    .stChatMessageContent {
-        padding: 1rem;
-        border-radius: 0.5rem;
-    }
-    div[data-testid="stChatMessageContent"] {
-        padding: 1rem;
-        border-radius: 0.5rem;
-    }
-    div[data-testid="stChatMessageContent"] p {
-        margin: 0;
-    }
-    /* Reduce space below the title */
-    h1 {
-        margin-bottom: 0rem; /* Set margin to 0 */
-    }
-    /* Target the container wrapping st.title to remove its bottom space more aggressively */
-    div[data-testid="stMarkdownContainer"] {
-        margin-bottom: 0rem !important;
-        padding-bottom: 0rem !important;
-    }
-    /* Ensure the chat messages container has no top margin */
-    .chat-messages {
-        margin-top: 0rem !important; /* Remove any top margin */
-        padding-top: 0rem; /* Keep padding-top at 0 */
-    }
-</style>
-""", unsafe_allow_html=True)
+with open("static/style.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 # Create columns for centering the chat interface
 col1, col2, col3 = st.columns([1, 2, 1])
@@ -291,30 +315,31 @@ with col2:
                 
                 # Stream LLM response
                 full_response = ""
-                response_stream = call_llm(context=relevant_text, prompt=user_input)
-                with messages_container:
-                    with st.chat_message("assistant"):
-                        placeholder = st.empty()
-                        for chunk in response_stream:
-                            for char in chunk:
-                                full_response += char
-                                placeholder.markdown(full_response)
-                                time.sleep(0.01)  # Adjust speed as desired
-                        # Add source documents in a collapsible expander
-                        with st.expander("View Source Documents", expanded=False):
-                            for i, doc_id in enumerate(relevant_text_ids):
-                                st.write(f"**Document {i+1}:** {doc_id}")
-                                st.write(f"Content: {context[i]}")
-                                if i < len(relevant_text_ids) - 1:  # Don't add separator after last document
-                                    st.write("---")
+                response_generator = call_llm(context=relevant_text, prompt=user_input)
                 
-                # Append assistant response to session state
+                # Accumulate the response before displaying
+                for chunk in response_generator:
+                    full_response += chunk
+
+                # Display the full assistant message and append to session state
+                with messages_container:
+                    st.chat_message("assistant").write(full_response)
+                
                 st.session_state["messages"].append({"role": "assistant", "content": full_response})
+                
+                # Add source documents in a collapsible expander
+                with messages_container:
+                    with st.expander("View Source Documents", expanded=False):
+                        for i, doc_id in enumerate(relevant_text_ids):
+                            st.write(f"**Document {i+1}:** {doc_id}")
+                            st.write(f"Content: {context[i]}")
+                            if i < len(relevant_text_ids) - 1:  # Don't add separator after last document
+                                st.write("---")
             else:
                 warning = "No relevant documents found for your query. Please try a different question."
                 st.session_state["messages"].append({"role": "assistant", "content": warning})
                 with messages_container:
                     st.chat_message("assistant").write(warning)
 
-print(torch.cuda.is_available())
-print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'No CUDA device')
+# print(torch.cuda.is_available())
+# print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'No CUDA device')
