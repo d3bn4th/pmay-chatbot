@@ -68,7 +68,7 @@ def query_collection(prompt: str, n_results: int = 10):
 
 def call_llm(context: str, prompt: str):
     response = ollama.chat(
-        model="llama3.2:1b",
+        model="llama3.2:3b",
         stream=True,
         messages=[
             {
