@@ -3,7 +3,7 @@ SHELL :=/bin/bash
 .PHONY: clean check setup run install-models help
 .DEFAULT_GOAL=help
 VENV_DIR = .venv
-PYTHON_VERSION = python3.11
+PYTHON_VERSION = python
 
 check: # Run linting checks
 	@echo "🔍 Running linting checks..."
@@ -34,8 +34,8 @@ setup: # Initial project setup
 	@echo "Creating virtual env at: $(VENV_DIR)"
 	@$(PYTHON_VERSION) -m venv $(VENV_DIR)
 	@echo "Installing dependencies..."
-	@source $(VENV_DIR)/bin/activate && pip install -r requirements/requirements-dev.txt && pip install -r requirements/requirements.txt
-	@echo -e "\n✅ Setup complete!\n🎉 Run the following commands to get started:\n\n ➡️ source $(VENV_DIR)/bin/activate\n ➡️ make install-models\n ➡️ make run\n"
+	@.venv\Scripts\activate && pip install -r requirements/requirements-dev.txt && pip install -r requirements/requirements.txt
+	@echo -e "\n✅ Setup complete!\n🎉 Run the following commands to get started:\n\n ➡️ .venv\Scripts\activate\n ➡️ make install-models\n ➡️ make run\n"
 
 install-models: # Install required Ollama models
 	@echo "📥 Installing required Ollama models..."

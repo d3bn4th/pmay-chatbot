@@ -2,7 +2,7 @@ import os
 from app import process_document, add_to_vector_collection
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
-DOCS_DIR = "docs_new"
+DOCS_DIR = "docs"
 
 class DummyUploadedFile:
     """A dummy class to mimic Streamlit's UploadedFile for local files."""
